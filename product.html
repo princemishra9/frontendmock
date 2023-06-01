@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Product List</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<style>
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    li {
+        margin: 20px 0;
+        border: 1px solid #ccc;
+        padding: 20px;
+    }
+
+    h2 {
+        margin: 0;
+    }
+
+    p {
+        margin: 10px 0;
+    }
+
+    span {
+        font-weight: bold;
+    }
+</style>
+
+<body>
+    <h1>Product List</h1>
+    <ul id="product-list"></ul>
+
+    <script>
+        // write your code here
+        // solution by using promise chaining
+        fetch('https://dummyjson.com/products')
+            .then((res) => res.json())
+            .then((data) => {
+                let product_list = document.getElementById('product-list');
+                data.products.forEach((product) => {
+                    let li = document.createElement('li');
+                    li.innerHTML = `<h2>${product.title}</h2>`;
+                    li.innerHTML += `<p>${product.description}</p>`;
+                    li.innerHTML += `Price: <span>${product.price}$ </span>`;
+                    li.innerHTML += `&nbsp; Category: <span>${product.category}</span>`;
+                    product_list.appendChild(li);
+                })
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+        // by using async await
+        async function productList() {
+            let res = await fetch("https://dummyjson.com/products");
+            let data = await res.json();
+            let product_list = document.getElementById("product-list");
+            data.products.forEach((product) => {
+                let li = document.createElement("li");
+                li.innerHTML = `<h2>${product.title}</h2>`;
+                li.innerHTML += `<p>${product.description}</p>`;
+                li.innerHTML += `Price:<span>${product.price}$ </span>`;
+                li.innerHTML += ` Category:<span>${product.category}</span>`;
+                product_list.appendChild(li);
+            });
+        }
+      // productList();
+    </script>
+</body>
+
+</html>

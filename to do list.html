@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>To-Do List</title>
+    <style>
+      /* some basic styling for the app */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      #app {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        font-size: 18px;
+        margin-bottom: 5px;
+      }
+      input[type="text"],
+      textarea {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        font-size: 18px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+      }
+      button {
+        display: block;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0069d9;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        margin-top: 2rem;
+      }
+      li {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+      .task-title {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+      .task-desc {
+        font-size: 18px;
+      }
+      .task-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h1>To-Do List</h1>
+      <form id="add-task-form">
+        <label for="task-title">Task Title:</label>
+        <input type="text" id="task-title" name="task-title" required />
+        <label for="task-desc">Task Description:</label>
+        <textarea id="task-desc" name="task-desc" rows="4" required></textarea>
+        <button id="add-to-list" type="submit">Add Task</button>
+      </form>
+      <ul id="task-list"></ul>
+    </div>
+  </body>
+  <script>
+    let addtaskBtn = document.querySelector("#add-to-list")
+    addtaskBtn.addEventListener("click" ,addTask);
+    let taskList = document.getElementById('task-list');
+
+    let todoList = JSON.parse(localStorage.getItem("todoList")) || [];
+
+    function addTask(e) {
+        e.preventDefault();
+        let  taskTitle = document.getElementById("task-title").value;
+        let taskDescription = document.getElementById("task-desc").value;
+        todoList.push({title: taskTitle, description: taskDescription});
+        localStorage.setItem("todoList", JSON.stringify(todoList));
+        console.log("addTask   ....");
+        updateUiList();
+    }
+
+    function updateUiList(){
+        taskList.innerHTML = "";
+        console.log("task List   ....", taskList);
+        todoList.forEach((item) => {
+            let li = document.createElement('li');
+            li.innerHTML = `<h2>${item.title}</h2>`;
+            li.innerHTML += `<p>${item.description}</p>`;
+            taskList.appendChild(li);
+        })
+        taskList.childNodes.forEach((item) => {
+            item.addEventListener("click", removeTask);
+        })
+    }
+
+    function removeTask(event){
+        taskList.removeChild(event.target);
+        taskList.childNodes.forEach((item) => {
+            if(event.target == item){
+                todoList.splice(todoList.indexOf(item), 1);
+            }
+        });
+        localStorage.setItem("todoList", JSON.stringify(todoList));
+    }
+
+    window.addEventListener('load', updateUiList);
+  </script>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Cookie Example</title>
+</head>
+
+<body>
+    <form>
+        <label for="name">Enter your name:</label>
+        <input type="text" id="name" name="name" />
+        <label for="lname">last name:</label>
+        <button type="submit" onclick="setCookie()">Submit</button>
+        <div id="setCookie"> </div>
+    </form>
+
+    <script>
+        // write your code here
+        function setCookie() {
+            var name = document.getElementById("name").value;
+            document.cookie = "name=" + name;
+            var setCookieDiv = document.getElementById("setCookie");
+            setCookieDiv.innerHTML = "Name saved to cookie: " +name;
+        }
+
+        function getCookie(name,lname) {
+
+            var cookieName = name + "=";
+           
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var cookieArray = decodedCookie.split(";");
+            for (var i = 0; i < cookieArray.length; i++) {
+                var cookie = cookieArray[i];
+                while (cookie.charAt(0) === " ") {
+                    cookie = cookie.substring(1);
+                }
+                if (cookie.indexOf(cookieName,) === 0) {
+                    return cookie.substring(cookieName.length, cookie.length,);
+                }
+            }
+            return "";
+        }
+
+        var savedName = getCookie("name");
+        if (savedName !== "") {
+            var setCookieDiv = document.getElementById("setCookie");
+            setCookieDiv.innerHTML = "Name fetched from cookie: " + savedName;
+        }
